@@ -12,7 +12,6 @@ namespace Invoices;
 return array(
     'service_manager' => array(
         'invokables' => array(
-            'invoices.procesor' => 'Invoices\Repository\Invoices',
             'repo.invoices' => 'Invoices\Entity\Invoices',
         ),
     ),
@@ -32,10 +31,17 @@ return array(
         ),
     ),
     'fakturownia' => array(
-        'login' => 'przemyslaw-kublin',
+        'login' => '',
         'password' => '',
-        'host' => 'przemyslaw-kublin.fakturownia.pl',
-        'token' => 'fb8dhvPYfgMaroU7otV/przemyslaw-kublin',
+        'host' => '',
+        'token' => '',
+        'place' => '',
+        'seller_name' => '',
+        'seller_tax_no' => '',
+        'seller_post_code' => '',
+        'seller_city' => '',
+        'seller_street' => '',
+        'seller_country' => '',
+        'lang' => '',
     ),
-    'invoices_entity' => 'Application\Entity\Test'
 );

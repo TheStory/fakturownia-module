@@ -9,22 +9,34 @@
 
 namespace Invoices;
 
-use Zend\Mvc\ModuleRouteListener;
-use Zend\Mvc\MvcEvent;
+use Invoices\Model\Invoices;
+use Zend\ModuleManager\ModuleEvent;
+use Zend\ModuleManager\ModuleManager;
 
 class Module
 {
-    public function onBootstrap(MvcEvent $e)
+    public function init(ModuleManager $manager)
     {
-        $eventManager = $e->getApplication()->getEventManager();
-        $moduleRouteListener = new ModuleRouteListener();
-        $moduleRouteListener->attach($eventManager);
+        $events = $manager->getEventManager();
+        $events->attach(ModuleEvent::EVENT_MERGE_CONFIG, [$this, 'checkConfig']);
+    }
+
+    public function checkConfig(ModuleEvent $event)
+    {
+        $configListener = $event->getConfigListener();
+        $config = $configListener->getMergedConfig(false);
+
+        $keys = ['login', 'password', 'host', 'token', 'seller_name', 'seller_tax_no', 'seller_post_code', 'seller_city', 'seller_street', 'seller_country', 'lang'];
+
+        foreach ($keys as $k) {
+            if (empty($config['fakturownia'][$k])) {
+                throw new \Exception(sprintf("Invoices configuration error: '%s' is empty", $k));
+            }
+        }
     }
 
     public function getConfig()
     {
-        //return include __DIR__ . '/config/module.config.php';
-
         $config = array();
         $configFiles = array(
             include __DIR__ . '/config/module.config.php',
@@ -36,7 +48,6 @@ class Module
         return $config;
     }
 
-
     public function getAutoloaderConfig()
     {
         return array(
@@ -46,5 +57,16 @@ class Module
                 ),
             ),
         );
+    }
+
+    public function getServiceConfig()
+    {
+        return [
+            'factories' => [
+                'invoices.procesor' => function ($sm) {
+                    return new Invoices($sm);
+                },
+            ],
+        ];
     }
 }

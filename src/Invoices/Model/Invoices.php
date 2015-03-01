@@ -3,17 +3,21 @@
 namespace Invoices\Model;
 
 use Invoices\Interfaces;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
-class Invoices implements Interfaces\GpInvoices
+class Invoices implements Interfaces\GpInvoices, ServiceLocatorAwareInterface
 {
 
     private $sFLogin;
     private $sFPassword;
     private $sFHost;
     private $sFToken;
+    private $serviceLocator;
 
     public function __construct($oSC)
     {
+        $this->serviceLocator = $oSC;
 
         //$em = $oSC->get('Doctrine\ORM\EntityManager');
         $aConf = $oSC->get('config');
@@ -29,6 +33,26 @@ class Invoices implements Interfaces\GpInvoices
         if (!function_exists('curl_init')) {
             die('Sorry cURL is not installed!');
         }
+    }
+
+    /**
+     * Set service locator
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     */
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
+    }
+
+    /**
+     * Get service locator
+     *
+     * @return ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->serviceLocator;
     }
 
     /**
@@ -124,13 +148,28 @@ class Invoices implements Interfaces\GpInvoices
 
     public function saveNewInvoice($sData)
     {
-        $json = '{ "api_token": "' . $this->sFToken . '", "invoice": ' . $sData . ' }';
+        $config = $this->getServiceLocator()->get('config');
+
+        $sData['place']             = $config['fakturownia']['place'];
+        $sData['seller_name']       = $config['fakturownia']['seller_name'];
+        $sData['seller_tax_no']     = $config['fakturownia']['seller_tax_no'];
+        $sData['seller_post_code']  = $config['fakturownia']['seller_post_code'];
+        $sData['seller_city']       = $config['fakturownia']['seller_city'];
+        $sData['seller_street']     = $config['fakturownia']['seller_street'];
+        $sData['seller_country']    = $config['fakturownia']['seller_country'];
+        $sData['lang']    = $config['fakturownia']['lang'];
+
+        $json = '{ "api_token": "' . $this->sFToken . '", "invoice": ' . json_encode($sData) . ' }';
         $sUrl = 'https://' . $this->sFHost . '/invoices.json';
 
         $aRes = $this->__connect($sUrl, $json);
 
-        if (isset($aRes['error'])) {
+        if (isset($aRes['code']) && $aRes['code'] == 'error') {
 
+            var_dump(get_object_vars($aRes['message']));
+            var_dump($sData);
+
+            throw new \Exception(sprintf('Fakturownia: Invoice cannot be added'));
         } else {
             //add new client into
         }
