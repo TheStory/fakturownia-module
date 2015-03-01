@@ -23,41 +23,26 @@ return array(
             'translator' => 'MvcTranslator',
         ),
     ),
-	
-    'view_manager' => array(
-        'display_exceptions'       => true,
-        'template_path_stack' => array(
-            __DIR__ . '/../view',
-        ),
-    ),
-    // Placeholder for console routes
-    'console' => array(
-        'router' => array(
-            'routes' => array(
+    // Doctrine entities configuration
+    'doctrine' => array(
+        'driver' => array(
+            __NAMESPACE__ . '_driver' => array(
+                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                'cache' => 'array',
+                'paths' => array(__DIR__ . '/../src/' . __NAMESPACE__ . '/Entity')
+            ),
+            'orm_default' => array(
+                'drivers' => array(
+                    __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
+                ),
             ),
         ),
     ),
-	// Doctrine entities configuration
-    'doctrine' => array(
-	    'driver' => array(
-		    __NAMESPACE__ . '_driver' => array(
-			    'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-			    'cache' => 'array',
-			    'paths' => array(__DIR__ . '/../src/' . __NAMESPACE__ . '/Entity')
-		    ),
-		    'orm_default' => array(
-			    'drivers' => array(
-				    __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
-			    ),
-		    ),
-	    ),
+    'fakturownia' => array(
+        'login' => 'przemyslaw-kublin',
+        'password' => '',
+        'host' => 'przemyslaw-kublin.fakturownia.pl',
+        'token' => 'fb8dhvPYfgMaroU7otV/przemyslaw-kublin',
     ),
-	'fakturownia' => array(
-			'login' => 'przemyslaw-kublin',
-			'password' => '',
-			'host' => 'przemyslaw-kublin.fakturownia.pl',
-			'token' => 'fb8dhvPYfgMaroU7otV/przemyslaw-kublin',
-		),
-	 
-		'invoices_entity' => 'Application\Entity\Test'
+    'invoices_entity' => 'Application\Entity\Test'
 );
