@@ -30,7 +30,6 @@ class Relation
      */
     public $client_id;
 
-
     /**
      * @ORM\Column(type="string")
      */
@@ -46,7 +45,6 @@ class Relation
 
     /**
      * @param mixed $id
-     *
      * @return Test
      */
     public function setId($id)
@@ -65,7 +63,6 @@ class Relation
 
     /**
      * @param mixed $title
-     *
      * @return Test
      */
     public function setDateTime($sDateTime)
