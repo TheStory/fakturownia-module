@@ -11,16 +11,9 @@ namespace Invoices;
 
 return array(
     'service_manager' => array(
-        'abstract_factories' => array(
-            'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
-            'Zend\Log\LoggerAbstractServiceFactory',
-        ),
         'invokables' => array(
             'invoices.procesor' => 'Invoices\Repository\Invoices',
             'repo.invoices' => 'Invoices\Entity\Invoices',
-        ),
-        'aliases' => array(
-            'translator' => 'MvcTranslator',
         ),
     ),
     // Doctrine entities configuration
