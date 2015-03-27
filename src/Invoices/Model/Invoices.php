@@ -170,9 +170,9 @@ class Invoices implements Interfaces\GpInvoices, ServiceLocatorAwareInterface
             var_dump($sData);
 
             throw new \Exception(sprintf('Fakturownia: Invoice cannot be added'));
-        } else {
-            //add new client into
         }
+
+        return $aRes;
     }
 
     public function getClientList()
