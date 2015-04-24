@@ -150,13 +150,7 @@ class Invoices implements Interfaces\GpInvoices, ServiceLocatorAwareInterface
     {
         $config = $this->getServiceLocator()->get('config');
 
-        $sData['place']             = $config['fakturownia']['place'];
-        $sData['seller_name']       = $config['fakturownia']['seller_name'];
-        $sData['seller_tax_no']     = $config['fakturownia']['seller_tax_no'];
-        $sData['seller_post_code']  = $config['fakturownia']['seller_post_code'];
-        $sData['seller_city']       = $config['fakturownia']['seller_city'];
-        $sData['seller_street']     = $config['fakturownia']['seller_street'];
-        $sData['seller_country']    = $config['fakturownia']['seller_country'];
+        $sData['place']   = $config['fakturownia']['place'];
         $sData['lang']    = $config['fakturownia']['lang'];
 
         $json = '{ "api_token": "' . $this->sFToken . '", "invoice": ' . json_encode($sData) . ' }';
