@@ -26,7 +26,7 @@ class Module
         $configListener = $event->getConfigListener();
         $config = $configListener->getMergedConfig(false);
 
-        $keys = ['login', 'password', 'host', 'token', 'seller_name', 'seller_tax_no', 'seller_post_code', 'seller_city', 'seller_street', 'seller_country', 'lang'];
+        $keys = ['login', 'password', 'host', 'token', 'lang'];
 
         foreach ($keys as $k) {
             if (empty($config['fakturownia'][$k])) {
