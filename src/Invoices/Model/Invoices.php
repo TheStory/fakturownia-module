@@ -159,7 +159,12 @@ class Invoices implements Interfaces\GpInvoices, ServiceLocatorAwareInterface
         $aRes = $this->__connect($sUrl, $json);
 
         if (isset($aRes['code']) && $aRes['code'] == 'error') {
-            throw new \Exception(sprintf('Fakturownia: Invoice cannot be added - ' . $aRes['message']));
+            if (is_string($aRes['message'])) {
+                $message = $aRes['message'];
+            } else {
+                $message = json_encode($aRes['message']);
+            }
+            throw new \Exception($message);
         }
 
         return $aRes;
